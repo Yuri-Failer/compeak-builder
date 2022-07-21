@@ -1,15 +1,11 @@
 import React, {
-  memo, useEffect, useMemo, useState,
+  useEffect, useState,
 } from 'react';
-import PropTypes from 'prop-types';
 import Loader from './loader';
 import { getPlaceholders } from '../server/data';
 import PlaceholderButton from './placeholder-button';
 import { useDataContext } from '../context/editor-context';
 
-Placeholders.propTypes = {
-
-};
 function createSubstituitionMap(items) {
   const result = {};
   Object.values(items).forEach((value) => {
@@ -18,8 +14,16 @@ function createSubstituitionMap(items) {
   return { ...result };
 }
 
+export function splitText(text, index, addText) {
+  const textArray = text.split('');
+  textArray.splice(index, 0, addText);
+  return textArray.join('');
+}
+
 function Placeholders() {
-  const { appender, setSubstitutionsMap } = useDataContext();
+  const {
+    text, setText, setSubstitutionsMap, inputRef,
+  } = useDataContext();
   const [items, setItems] = useState({});
   useEffect(() => {
     const fetchPlaceholders = async () => {
@@ -37,17 +41,17 @@ function Placeholders() {
 
   const onClickHandler = (key) => {
     if (Object.keys(items).length > 0) {
-      const appendText = `[${items[key].name}]`;
-      appender(appendText);
+      const index = inputRef.current?.selectionStart || 0;
+      setText(splitText(text, index, `[${items[key].name}]`));
+      // return focus to input.
+      inputRef.current.focus();
     }
   };
   return (
     <ul className="my-4">
-      <button onClick={() => createSubstituitionMap(items)}>TEST</button>
       {Object.keys(items).length > 0
         ? Object.keys(items).map((key) => (<PlaceholderButton key={key} itemKey={key} name={items[key].name} onClickHandler={onClickHandler} />))
         : <Loader />}
-
     </ul>
   );
 }

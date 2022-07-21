@@ -3,7 +3,6 @@ import { useDataContext } from '../context/editor-context';
 
 export default function Preview() {
   const { text, substitutionsMap } = useDataContext();
-  // const map = {"[Country]": "israel", "[First Name]": "Ben" }
   const replaced = text.length > 0 && text.replace(/\[(?:\[??[^[]*?\])/g, (match) => (substitutionsMap[match]));
   return (
     <div className="my-2">
