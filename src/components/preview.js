@@ -2,8 +2,9 @@ import React from 'react';
 import { useDataContext } from '../context/editor-context';
 
 export default function Preview() {
-  const { text, substitutionsMap } = useDataContext();
+  const { text, substitutionsMap, setLength } = useDataContext();
   const replaced = text.length > 0 && text.replace(/\[(?:\[??[^[]*?\])/g, (match) => (substitutionsMap[match]));
+  setLength(replaced.length);
   return (
     <div className="my-2">
       <h3 className="text-blue-300 font-bold text-left">Preview</h3>

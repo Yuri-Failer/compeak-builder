@@ -3,7 +3,9 @@ import { FaRegTrashAlt } from 'react-icons/fa';
 import { useDataContext } from '../context/editor-context';
 
 function Editor() {
-  const { text, setText, inputRef } = useDataContext();
+  const {
+    text, length, setText, inputRef,
+  } = useDataContext();
   const handleChange = (event) => {
     setText(event.target.value);
   };
@@ -18,7 +20,7 @@ function Editor() {
         <textarea ref={inputRef} className="w-full p-4 border-2 border-gray-350 rounded-b-md" rows="6" onChange={handleChange} value={text}>Hello</textarea>
       </div>
 
-      <div className="text-gray-500 font-semibold text-left">length: {text?.length || 0} chars</div>
+      <div className="text-gray-500 font-semibold text-left">length: {length} chars</div>
     </div>
   );
 }

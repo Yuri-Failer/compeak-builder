@@ -13,6 +13,7 @@ export const ActionsContext = createContext(null);
 export function DataProvider({ children }) {
   const [text, setText] = useState('');
   const [substitutionsMap, setSubstitutionsMap] = useState([]);
+  const [length, setLength] = useState(0);
   const inputRef = useRef();
 
   function insertPlaceholder(addText) {
@@ -33,7 +34,9 @@ export function DataProvider({ children }) {
     setText,
     substitutionsMap,
     inputRef,
-  }), [text, substitutionsMap, inputRef]);
+    length,
+    setLength,
+  }), [text, substitutionsMap, length]);
   return (
     <DataContext.Provider value={value}>
       <ActionsContext.Provider value={actions}>
