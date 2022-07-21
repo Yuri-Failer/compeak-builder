@@ -4,7 +4,7 @@ import React, {
 import Loader from './loader';
 import { getPlaceholders } from '../server/data';
 import PlaceholderButton from './placeholder-button';
-import { useDataContext } from '../context/editor-context';
+import { useActionContext } from '../context/editor-context';
 
 function createSubstituitionMap(items) {
   const result = {};
@@ -14,16 +14,8 @@ function createSubstituitionMap(items) {
   return { ...result };
 }
 
-export function splitText(text, index, addText) {
-  const textArray = text.split('');
-  textArray.splice(index, 0, addText);
-  return textArray.join('');
-}
-
 function Placeholders() {
-  const {
-    text, setText, setSubstitutionsMap, inputRef,
-  } = useDataContext();
+  const { insertPlaceholder, setSubstitutionsMap } = useActionContext();
   const [items, setItems] = useState({});
   useEffect(() => {
     const fetchPlaceholders = async () => {
@@ -41,10 +33,7 @@ function Placeholders() {
 
   const onClickHandler = (key) => {
     if (Object.keys(items).length > 0) {
-      const index = inputRef.current?.selectionStart || 0;
-      setText(splitText(text, index, `[${items[key].name}]`));
-      // return focus to input.
-      inputRef.current.focus();
+      insertPlaceholder(`[${items[key].name}]`);
     }
   };
   return (
